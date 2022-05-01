@@ -48,11 +48,18 @@ class Agent:
 
         # choose according to policy/max Q-value action
         else:
+            #print("took best action")
+
             q_vals = self.q_table[:, self.position[0], self.position[1]]
+            print("q vals", q_vals)
 
             # print(q_vals)
             # print(type(q_vals))
+            #is_equal = np.all(q_vals == q_vals[0])
             max_q_vals_ind = np.argmax(q_vals)
+
+            print("max index", max_q_vals_ind)
+            #print("position", self.position)
 
         action = self.actions[max_q_vals_ind]
         # idx, action, q_val = self.e_greedy()

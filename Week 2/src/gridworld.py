@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 class Gridworld:
     def __init__(self, shape: tuple, num_pun: int, blocks=10,
-                 terminal_reward=10, num_blocks=3):
+                 terminal_reward=10, num_blocks=5):
         """
 
         Args:
@@ -34,15 +34,28 @@ class Gridworld:
         x, y = np.where(self.grid == 0)
         for i in range(num_blocks):
             idx = rand.randint(len(list(x)))
-            self.grid[x[idx], y[idx]] = 5
+            self.grid[x[idx], y[idx]] = -5
 
         plt.ion()
 
-        self.fig, ax = plt.subplots()
+        #set all to -1
+
+        # x,y = np.where(self.grid == 0)
+        # for i in range(len(x)):
+        #     self.grid[x[i], y[i]]=-1
+
+
+        self.fig, self.plots = plt.subplots(ncols=5)
 
         # this example doesn't work because array only contains zeroes
         # alternatively this process can be automated from the data
-        self.world = ax.imshow(self.grid,  vmin=-5, vmax=10, cmap="jet")
+        self.world = self.plots[0].imshow(self.grid,  vmin=-5, vmax=15, cmap="jet")
+        movement: dict = {"up": 0, "down": 1, "left": 2, "right": 3}
+        self.actionPlots = []
+        for plot, m in zip(self.plots[1:], movement.keys()):
+            a = plot.imshow(np.ones(self.shape), vmin=-5, vmax=5)
+            plot.set_title(m)
+            self.actionPlots.append(a)
 
 
     def reset(self):
@@ -51,15 +64,21 @@ class Gridworld:
         self.grid[:, :] = 0
 
     def visualize(self, agent):
-        print("in visualize")
+        #print("in visualize")
         # prin
         # print("agent position",agent.position)
 
         vis = self.grid.copy()
-        vis[agent.position[0], agent.position[1]] = -5
+        vis[agent.position[0], agent.position[1]] = 15
+        movement: dict = {"up": 0, "down": 1, "left": 2, "right": 3}
+        for plot, m in zip(self.actionPlots, movement.keys()):
+            plot.set_data(agent.q_table[movement[m]])
+            # print(f"{m} : {agent.q_table[movement[m]]}")
+
 
         self.world.set_data(vis)
         self.fig.canvas.flush_events()
+        # i = input("input to resume program")
 
 
     #         ax = self.fig.add_subplot(111)
@@ -82,14 +101,14 @@ class Gridworld:
 
 
         """
-        print("Action", action)
+       # print("Action", action)
         action = action.value
         end = False
 
-        print("Agent position", agent.position)
-        print(type(agent.position))
-        print("action", action)
-        print(type(action))
+       # print("Agent position", agent.position)
+        #print(type(agent.position))
+       # print("action", action)
+        #print(type(action))
         # update agents' position/state
         # rint("action", action)
         # new_pos = [self.agent_position[0] + action[0], self.agent_position[1] + action[1]]
@@ -108,23 +127,32 @@ class Gridworld:
             # print("No wall")
 
             # if obstacle
+          #  print("where wall", np.where(self.grid == -5))
+           # print("agent pos", agent.position)
+            if self.grid[new_pos[0], new_pos[1]] == -5:
+                #print("hits wall", agent.position)
 
-            if self.grid[new_pos[0], new_pos[1]] == 5:
                 pass
 
             else:
-                print("Should update")
-                print(new_pos)
+
+                #print("old position", agent.position)
+               # print("Should update")
+                #print(new_pos)
                 # self.agent_position = new_pos
                 agent.position = new_pos
-                print(agent.position)
+                #print("new position", agent.position)
+               # print(agent.position)
 
-                if self.agent_position == 10:
+                if self.grid[agent.position[0], agent.position[1]] == 10:
+                    print("in terminal")
                     end = True
 
-        print("Agent new position", agent.position)
+        #print("Agent new position", agent.position)
         # reward
         reward = self.grid[agent.position[0], agent.position[1]]
+        #print("reward", reward)
+        #print("end positon", agent.position)
 
         # print
         self.visualize(agent)
