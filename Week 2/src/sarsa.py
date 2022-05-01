@@ -70,7 +70,6 @@ class SARSA:
         action_index_memory = []
 
         #First action
-        #print("Hallllllllllllllllllllllllllllllllllllllllllllllllllllllllll")
         action_ind, action, q_val_old = self.agent.select_action()
         action_to_execute = action
         #S_0 position
@@ -126,9 +125,6 @@ class SARSA:
                 #     returns = sum([np.power(self.gamma, i) * r for r in im_rewards])
                 discounted = []
 
-                #print("tau +1", tau + 1)
-                #print("min tau toal", min(tau+n, total_t))
-                #print("test", im_rewards[tau+1: min(tau+n, total_t)])
 
                 for p, r in enumerate(im_rewards[tau+1: min(tau+n, total_t)]):
                     discounted.append(np.power(self.gamma, p) * r)

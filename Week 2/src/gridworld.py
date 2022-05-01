@@ -66,7 +66,6 @@ class Gridworld:
     def visualize(self, agent):
         #print("in visualize")
         # prin
-        # print("agent position",agent.position)
 
         vis = self.grid.copy()
         vis[agent.position[0], agent.position[1]] = 15
@@ -78,20 +77,7 @@ class Gridworld:
 
         self.world.set_data(vis)
         self.fig.canvas.flush_events()
-        # i = input("input to resume program")
 
-
-    #         ax = self.fig.add_subplot(111)
-    #         shw = ax.imshow(vis)
-
-    #         # make bar
-    #         #bar = plt.colorbar(shw)
-
-    #         plt.colorbar(ax)
-    #         i = input()
-    #         plt.show()
-    #         self.fig.canvas.draw()
-    #         self.fig.canvas.flush_events()
 
     def step(self, action, agent):
 
@@ -101,58 +87,31 @@ class Gridworld:
 
 
         """
-       # print("Action", action)
         action = action.value
         end = False
 
-       # print("Agent position", agent.position)
-        #print(type(agent.position))
-       # print("action", action)
-        #print(type(action))
         # update agents' position/state
         # rint("action", action)
         # new_pos = [self.agent_position[0] + action[0], self.agent_position[1] + action[1]]
         new_pos = [agent.position[0] + action[0], agent.position[1] + action[1]]
 
         # if out of range
-        # print("in Step executrion")
-        # print("aaction", action)
-
-        # print("agent old position", agent.position)
-        # print("New pos y", new_pos[1])
-        # print("grid value", self.grid[new_pos[0], new_pos[1]])
         if (new_pos[0] < self.shape[0]) and (new_pos[0] >= 0) and (
                 new_pos[1] < self.shape[1]) and (new_pos[1] >= 0):
 
-            # print("No wall")
-
-            # if obstacle
-          #  print("where wall", np.where(self.grid == -5))
-           # print("agent pos", agent.position)
             if self.grid[new_pos[0], new_pos[1]] == -5:
-                #print("hits wall", agent.position)
-
                 pass
 
             else:
 
-                #print("old position", agent.position)
-               # print("Should update")
-                #print(new_pos)
-                # self.agent_position = new_pos
                 agent.position = new_pos
-                #print("new position", agent.position)
-               # print(agent.position)
 
                 if self.grid[agent.position[0], agent.position[1]] == 10:
                     print("in terminal")
                     end = True
 
-        #print("Agent new position", agent.position)
         # reward
         reward = self.grid[agent.position[0], agent.position[1]]
-        #print("reward", reward)
-        #print("end positon", agent.position)
 
         # print
         self.visualize(agent)
